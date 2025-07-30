@@ -78,7 +78,7 @@ fn main() {
     let mut pixels = Pixels::new(WIDTH, HEIGHT, SurfaceTexture::new(WIDTH, HEIGHT, &window)).unwrap();
     let mut show_welcome = true;
     let mut show_success = false;
-    let mut show_fps = true; // Nueva variable para controlar la visualización del FPS
+    let mut show_fps = true;
     let mut keys = [false; 4];
     let map = map::Map::new();
     let mut state = GameState {
@@ -87,7 +87,6 @@ fn main() {
         audio_manager: audio::AudioManager::new(),
     };
     
-    // Intentar reproducir música de fondo
     if let Err(e) = state.audio_manager.play_background_music("assets/background_music.mp3") {
         eprintln!("No se pudo reproducir música de fondo: {}", e);
         eprintln!("Asegúrate de tener un archivo 'background_music.mp3' en la carpeta 'assets/'");
@@ -128,22 +127,18 @@ fn main() {
                         match input.virtual_keycode {
                             Some(VirtualKeyCode::W) => {
                                 if input.state == ElementState::Pressed && !keys[0] {
-                                    // Iniciar sonido en loop al presionar W
                                     state.audio_manager.play_running_loop("assets/step.mp3");
                                 }
                                 if input.state == ElementState::Released && keys[0] {
-                                    // Detener sonido al soltar W
                                     state.audio_manager.stop_running_loop();
                                 }
                                 keys[0] = pressed;
                             },
                             Some(VirtualKeyCode::S) => {
                                 if input.state == ElementState::Pressed && !keys[1] {
-                                    // Iniciar sonido en loop al presionar S
                                     state.audio_manager.play_running_loop("assets/step.mp3");
                                 }
                                 if input.state == ElementState::Released && keys[1] {
-                                    // Detener sonido al soltar S
                                     state.audio_manager.stop_running_loop();
                                 }
                                 keys[1] = pressed;
@@ -216,8 +211,6 @@ fn main() {
                 fps_counter.update(frame_start.elapsed());
                 if show_fps {
                     render_fps_overlay(frame, WIDTH, HEIGHT, fps_counter.get_fps(), fps_counter.get_frame_time());
-
-                    // Dibuja el timer debajo del FPS
                     render_timer_overlay(frame, WIDTH, HEIGHT, elapsed_time);
                 }
                 
@@ -250,7 +243,7 @@ fn main() {
 fn render_fps_overlay(frame: &mut [u8], width: u32, height: u32, fps: f32, frame_time: f32) {
     // Dibujar un rectángulo semi-transparente para el FPS
     let overlay_width = 180;
-    let overlay_height = 40; // Reducido a solo 2 líneas
+    let overlay_height = 40;
     let x = width - overlay_width - 10;
     let y = 10;
     
@@ -274,7 +267,7 @@ fn render_fps_overlay(frame: &mut [u8], width: u32, height: u32, fps: f32, frame
             let fps_text = format!("FPS: {:.1}", fps);
             let frame_text = format!("Frame: {:.1}ms", frame_time);
             
-            let scale = rusttype::Scale::uniform(14.0); // Tamaño normal
+            let scale = rusttype::Scale::uniform(14.0);
             let v_metrics = font.v_metrics(scale);
             
             let start_x = x as f32 + 5.0;
@@ -326,9 +319,8 @@ fn render_timer_overlay(frame: &mut [u8], width: u32, height: u32, elapsed_time:
     let overlay_width = 180;
     let overlay_height = 20;
     let x = width - overlay_width - 10;
-    let y = 55; // Justo debajo del FPS
+    let y = 55; 
 
-    // Fondo semi-transparente
     for dy in 0..overlay_height {
         for dx in 0..overlay_width {
             let px = x + dx;
@@ -342,7 +334,6 @@ fn render_timer_overlay(frame: &mut [u8], width: u32, height: u32, elapsed_time:
             }
         }
     }
-// Texto del timer
     if let Ok(font_data) = std::fs::read("assets/DejaVuSans.ttf") {
         if let Some(font) = rusttype::Font::try_from_vec(font_data) {
             let timer_text = format!("Tiempo: {:.2} s", elapsed_time);
@@ -361,7 +352,7 @@ fn render_timer_overlay(frame: &mut [u8], width: u32, height: u32, elapsed_time:
                             let alpha = (v * 255.0) as u8;
                             frame[idx] = 255;
                             frame[idx + 1] = 255;
-                            frame[idx + 2] = 0; // Amarillo
+                            frame[idx + 2] = 0; 
                             frame[idx + 3] = alpha;
                         }
                     });

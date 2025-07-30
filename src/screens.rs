@@ -48,10 +48,8 @@ fn draw_image_centered(
     target_width: u32,
     target_height: u32,
 ) {
-    // Redimensionar la imagen al tamaño deseado
     let resized = image_data.resize(target_width, target_height, image::imageops::FilterType::Lanczos3);
     
-    // Calcular posición para centrar la imagen
     let x_offset = (width - target_width) / 2;
     let y_offset = (height - target_height) / 2;
     
@@ -116,13 +114,11 @@ pub fn show_welcome_screen(frame: &mut [u8], width: u32, height: u32) {
         }
     }
 
-    // Intentar cargar y mostrar la imagen
     if let Ok(image_data) = image::open("assets/welcome.png") {
         // Obtener dimensiones originales de la imagen
         let (img_w, img_h) = image_data.dimensions();
         let aspect_ratio = img_w as f32 / img_h as f32;
 
-        // Calcular dimensiones para que la imagen encaje en la ventana manteniendo la relación de aspecto
         let (target_width, target_height) = if width as f32 / height as f32 > aspect_ratio {
             let h = height;
             let w = (aspect_ratio * h as f32).round() as u32;
@@ -150,13 +146,11 @@ pub fn show_success_screen(frame: &mut [u8], width: u32, height: u32) {
         }
     }
 
-    // Intentar cargar y mostrar la imagen
     if let Ok(image_data) = image::open("assets/success_image.png") {
         // Obtener dimensiones originales de la imagen
         let (img_w, img_h) = image_data.dimensions();
         let aspect_ratio = img_w as f32 / img_h as f32;
 
-        // Calcular dimensiones para que la imagen encaje en la ventana manteniendo la relación de aspecto
         let (target_width, target_height) = if width as f32 / height as f32 > aspect_ratio {
             let h = height;
             let w = (aspect_ratio * h as f32).round() as u32;
@@ -167,7 +161,6 @@ pub fn show_success_screen(frame: &mut [u8], width: u32, height: u32) {
             (w, h)
         };
 
-        // Dibujar la imagen centrada y redimensionada
         draw_image_centered(frame, &image_data, width, height, target_width, target_height);
     }
 
