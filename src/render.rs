@@ -9,7 +9,7 @@ pub fn render_3d_basic(frame: &mut [u8], state: &GameState) {
             if y < HEIGHT / 2 {
                 frame[idx] = 120; frame[idx+1] = 180; frame[idx+2] = 255; // cielo
             } else {
-                frame[idx] = 60; frame[idx+1] = 60; frame[idx+2] = 60; // piso
+                frame[idx] = 218; frame[idx+1] = 219; frame[idx+2] = 195; // piso
             }
             frame[idx+3] = 0xFF;
         }
@@ -23,7 +23,7 @@ pub fn render_3d_basic(frame: &mut [u8], state: &GameState) {
         let start = ((HEIGHT as f32 - wall_height) / 2.0) as usize;
         let end = ((HEIGHT as f32 + wall_height) / 2.0) as usize;
         let color = match wall_type {
-            1 => [200, 50, 50],   // pared tipo 1
+            1 => [0, 82, 110],   // pared tipo 1
             2 => [50, 200, 50],   // pared tipo 2
             3 => [50, 50, 200],   // pared tipo 3
             _ => [180, 180, 180], // otro
@@ -50,7 +50,7 @@ pub fn render_minimap(frame: &mut [u8], state: &GameState) {
     for y in 0..map_h {
         for x in 0..map_w {
             let color = match state.map.grid[y][x] {
-                1 => [200, 50, 50],
+                1 => [39, 75, 92],
                 2 => [50, 200, 50],
                 3 => [50, 50, 200],
                 _ => [40, 40, 40],
