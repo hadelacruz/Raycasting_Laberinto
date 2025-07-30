@@ -170,5 +170,37 @@ pub fn show_success_screen(frame: &mut [u8], width: u32, height: u32) {
         // Dibujar la imagen centrada y redimensionada
         draw_image_centered(frame, &image_data, width, height, target_width, target_height);
     }
+
+    let font_data = std::fs::read("assets/DejaVuSans.ttf").expect("Error al leer la fuente");
+    let font = rusttype::Font::try_from_vec(font_data).expect("Error al cargar la fuente");
+
+    let lines = ["Presiona ESC para salir"];
+    let scale = rusttype::Scale::uniform(32.0);
+
+    let v_metrics = font.v_metrics(scale);
+    let line_height = v_metrics.ascent - v_metrics.descent + v_metrics.line_gap;
+    let y = height as f32 - line_height * 2.0; 
+
+    for line in lines.iter() {
+        let glyphs: Vec<_> = font.layout(line, scale, rusttype::point(0.0, 0.0)).collect();
+        let text_width: f32 = glyphs.iter().map(|g| g.unpositioned().h_metrics().advance_width).sum();
+        let x = (width as f32 - text_width) / 2.0;
+        for glyph in font.layout(line, scale, rusttype::point(x, y)) {
+            if let Some(bb) = glyph.pixel_bounding_box() {
+                glyph.draw(|gx, gy, v| {
+                    let px = gx as i32 + bb.min.x;
+                    let py = gy as i32 + bb.min.y;
+                    if px >= 0 && px < width as i32 && py >= 0 && py < height as i32 {
+                        let idx = ((py as u32 * width + px as u32) * 4) as usize;
+                        let alpha = (v * 255.0) as u8;
+                        frame[idx] = 255;
+                        frame[idx + 1] = 255;
+                        frame[idx + 2] = 255;
+                        frame[idx + 3] = alpha;
+                    }
+                });
+            }
+        }
+    }
 }
  
