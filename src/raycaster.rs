@@ -1,5 +1,3 @@
-use crate::{map::Map, player::Player};
-
 pub fn cast_ray(player_x: f32, player_y: f32, angle: f32, map: &crate::map::Map, max_depth: f32) -> (f32, u8) {
     let mut dist = 0.0;
     let mut hit_wall = false;

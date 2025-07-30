@@ -105,8 +105,6 @@ pub fn render_minimap(frame: &mut [u8], state: &GameState) {
     }
     // Dibujar la dirección del jugador
     let dir_len = (map_scale * 2) as f32;
-    let dir_x = px as f32 + state.player.angle.cos() * dir_len;
-    let dir_y = py as f32 + state.player.angle.sin() * dir_len;
     for i in 0..dir_len as usize {
         let x = px as f32 + state.player.angle.cos() * i as f32;
         let y = py as f32 + state.player.angle.sin() * i as f32;
